@@ -116,5 +116,51 @@ const updateQuestion = async (req, res) => {
     }
 };
 
+const deleteAnswer = async (req, res) => {
+    const { id } = req.params;
+    console.log("Attempting to delete question with ID:", id);
 
-module.exports = { addquestion, addanswer ,getQuestion,deleteQuestion,updateQuestion};
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        console.log("Invalid ID format received:", id);
+        return res.status(404).json({ error: "Invalid ID format" });
+    }
+
+    try {
+        const answer = await Answer.findOneAndDelete({ _id: id });
+        if (!answer) {
+            console.log("No answer found with ID:", id);
+            return res.status(404).json({ error: "No such answer" });
+        }
+        res.status(200).json(answer);
+    } catch (error) {
+        console.error("Error during deletion:", error);
+        res.status(500).json({ error: "Error deleting the answer: " + error.message });
+    }
+};
+
+const updateAnswer = async (req, res) => {
+    const { id } = req.params;
+    const updateData = req.body; // Assuming update data is sent in the request body
+
+    console.log()
+
+    console.log("Attempting to update question with ID:", id);
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        console.log("Invalid ID format received:", id);
+        return res.status(404).json({ error: "Invalid ID format" });
+    }
+
+    try {
+        const answer = await Answer.findByIdAndUpdate({ _id: id }, updateData);
+        if (!answer) {
+            console.log("No answer found with ID:", id);
+            return res.status(404).json({ error: "No such answer" });
+        }
+        res.status(200).json(answer);
+    } catch (error) {
+        console.error("Error during updating:", error);
+        res.status(500).json({ error: "Error updating the answer: " + error.message });
+    }
+};
+module.exports = { addquestion, addanswer ,getQuestion,deleteQuestion,updateQuestion,updateAnswer,deleteAnswer};
