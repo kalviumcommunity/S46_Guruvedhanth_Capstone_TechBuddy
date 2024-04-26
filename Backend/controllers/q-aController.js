@@ -1,6 +1,6 @@
 const Question = require("../models/question");
 const Answer = require("../models/answer");
-
+const mongoose=require("mongoose")
 const addquestion = async (req, res) => {
     try {
         const { title, category, code, description, username } = req.body;
@@ -68,4 +68,53 @@ const getQuestion = async (req, res) => {
     res.status(200).json(questions)
 }
 
-module.exports = { addquestion, addanswer ,getQuestion};
+const deleteQuestion = async (req, res) => {
+    const { id } = req.params;
+    console.log("Attempting to delete question with ID:", id);
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        console.log("Invalid ID format received:", id);
+        return res.status(404).json({ error: "Invalid ID format" });
+    }
+
+    try {
+        const question = await Question.findOneAndDelete({ _id: id });
+        if (!question) {
+            console.log("No question found with ID:", id);
+            return res.status(404).json({ error: "No such question" });
+        }
+        res.status(200).json(question);
+    } catch (error) {
+        console.error("Error during deletion:", error);
+        res.status(500).json({ error: "Error deleting the question: " + error.message });
+    }
+};
+
+const updateQuestion = async (req, res) => {
+    const { id } = req.params;
+    const updateData = req.body; // Assuming update data is sent in the request body
+
+    console.log()
+
+    console.log("Attempting to update question with ID:", id);
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        console.log("Invalid ID format received:", id);
+        return res.status(404).json({ error: "Invalid ID format" });
+    }
+
+    try {
+        const question = await Question.findByIdAndUpdate({ _id: id }, updateData);
+        if (!question) {
+            console.log("No question found with ID:", id);
+            return res.status(404).json({ error: "No such question" });
+        }
+        res.status(200).json(question);
+    } catch (error) {
+        console.error("Error during updating:", error);
+        res.status(500).json({ error: "Error updating the question: " + error.message });
+    }
+};
+
+
+module.exports = { addquestion, addanswer ,getQuestion,deleteQuestion,updateQuestion};
