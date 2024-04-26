@@ -1,7 +1,19 @@
 const User = require('../models/userModel');
 const { hashSync, compareSync } = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const passport = require('passport');
 require('../middleware/passport');
+
+// Helper functions
+const createTokens = (user) => {
+  const payload = {
+    username: user.username,
+    id: user._id
+  };
+  const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+  const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
+  return { token, refreshToken };
+};
 
 
 const signupUser = async (req, res) => {
@@ -63,14 +75,25 @@ const signupUser = async (req, res) => {
 
     await newUser.save();
 
+    const payload = {
+      id: newUser._id,
+      username: newUser.username
+    };
+
+    const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' }); // Access token
+    const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' }); // Refresh token
+
+
     // Successfully created the user
-    res.status(201).send({
+    res.status(201).send({ 
       success: true,
       message: "User created successfully.",
       user: {
         id: newUser._id,
         username: newUser.username
       },
+      token: `Bearer ${token}`,
+      refreshToken
     });
 
   } catch (err) {
@@ -101,19 +124,23 @@ const loginUser = async (req, res) => {
     if (!compareSync(password, user.password)) {
       return res.status(401).json({ success: false, message: "Incorrect password" });
     }
-    res.json({
+
+    const { token, refreshToken } = createTokens(user);
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    res.json({  
       success: true,
       message: "Logged in successfully!",
+      token: "Bearer " + token,
+      refreshToken
     });
   } catch (err) {
     res.status(500).json({ success: false, message: "An error occurred", error: err.message });
   }
 };
 
-const logout = async (req, res) => {
-  const { user } = req;
-  res.json({ message: "Logout successful" });
-};
+
 
 const google = (req, res, next) => {
   passport.authenticate('google', { scope: ['email', 'profile'] })(req, res, next);
@@ -130,6 +157,24 @@ const googlecallback = (req, res, next) => {
     }
 
     try {
+      const payload = {
+        id: user._id,
+        username: user.username,
+      };
+
+      // Generate access token
+      const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+
+      // Generate refresh token
+      const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
+
+      // Store refresh token in MongoDB
+      user.refreshToken = refreshToken;
+      await user.save();
+
+
+      res.cookie('username', user.username, { httpOnly: true }); // You can set other options as needed
+
       // Redirect user after successful login
       res.redirect('http://localhost:5173/');
 
@@ -141,4 +186,4 @@ const googlecallback = (req, res, next) => {
 
 
 
-module.exports = { signupUser,loginUser,logout,google,googlecallback};
+module.exports = { signupUser,loginUser,google,googlecallback};
