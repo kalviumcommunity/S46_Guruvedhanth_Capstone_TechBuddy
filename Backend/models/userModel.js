@@ -19,7 +19,9 @@ const userSchema = new Schema({
     type:String,
   },
   googleId: String,
-
+  refreshToken:{
+    type:String,
+  },
 });
 
 module.exports = mongoose.model('User', userSchema);

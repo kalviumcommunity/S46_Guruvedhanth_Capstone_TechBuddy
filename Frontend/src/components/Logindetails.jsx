@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { usernameState } from '../Recoil'; 
+import { usernameState } from '../Recoil';
 import axios from "axios";
-import google from "../assets/google.png"
+import google from "../assets/google.png";
 
 function LoginDetails() {
   const [usernameInput, setUsernameInput] = useState('');
   const [password, setPassword] = useState("");
   const [username, setUsername] = useRecoilState(usernameState);
   const [error, setError] = useState(null);
-
+  const [agreeTerms, setAgreeTerms] = useState(false);
 
   const handleGoogle = async () => {
     try {
@@ -21,30 +21,35 @@ function LoginDetails() {
     }
   };
 
-
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, checked } = e.target;
 
     if (name === "password") {
       setPassword(value);
-    }else if(name=="username"){
-      setUsernameInput(e.target.value)
+    } else if (name === "username") {
+      setUsernameInput(e.target.value);
+    } else if (name === "agreeTerms") {
+      setAgreeTerms(checked);
     }
   };
 
-  const handleSubmit=(e)=>{
-
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError(null);
 
+    if (!agreeTerms) {
+      setError("Please agree to the terms and conditions.");
+      return;
+    }
+
     axios
       .post("http://localhost:3000/api/users/login", {
-        username:usernameInput,
+        username: usernameInput,
         password: password,
       })
       .then((response) => {
         setUsername(usernameInput);
-        console.log("Sucess")
+        document.cookie = `username=${usernameInput};path=/`;
       })
       .catch((error) => {
         if (error.response && error.response.data && error.response.data.message) {
@@ -53,8 +58,7 @@ function LoginDetails() {
           setError("An error occurred. Please try again later.");
         }
       });
-  }
-
+  };
   return (
     <div className='flex flex-col justify-center items-center gap-y-16'>
       <div className='flex flex-col justify-center items-center gap-y-5 text-center	'>
@@ -82,11 +86,22 @@ function LoginDetails() {
       
           {error && <p className="text-red-500 m-2">{error}</p>}
           <div className='flex justify-between items-center w-64'>
-            <input type="checkbox" />
-            <label >I agree to terms and conditions</label>
+            <input 
+              type="checkbox" 
+              name="agreeTerms" 
+              checked={agreeTerms} 
+              onChange={handleChange}
+            />
+            <label>I agree to terms and conditions</label>
           </div>
 
-          <button onClick={handleSubmit} className='h-10 w-72 bg-green-500	rounded'>Login</button>
+          <button 
+            onClick={handleSubmit} 
+            className={`h-10 w-72 bg-green-500	rounded ${!agreeTerms && 'cursor-not-allowed opacity-50'}`} 
+            disabled={!agreeTerms}
+          >
+            Login
+          </button>
         </div> 
 
         <div className='flex justify-between px-12 items-center h-10 w-80 border border-gray-500 rounded-md' onClick={handleGoogle}>
