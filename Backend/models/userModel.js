@@ -18,6 +18,8 @@ const userSchema = new Schema({
   email:{
     type:String,
   },
+  googleId: String,
+
 });
 
 module.exports = mongoose.model('User', userSchema);
