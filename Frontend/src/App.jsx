@@ -1,15 +1,12 @@
 import React from 'react'
-import LoginPage from './pages/LoginPage'
-import SignupPage from './pages/SignupPage'
 import Questions from "./components/Questions"
-
+import LoginPage from "./pages/LoginPage"
 function App() {
   return (
     <div>
-      {/* <LoginPage/> */}
-      <Questions/>
+      <LoginPage/>
     </div>
   )
 }
 
-export default App
+export default App  
