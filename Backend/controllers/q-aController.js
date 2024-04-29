@@ -1,6 +1,8 @@
 const Question = require("../models/question");
 const Answer = require("../models/answer");
 const mongoose=require("mongoose")
+
+
 const addquestion = async (req, res) => {
     try {
         const { title, category, code, description, username } = req.body;
@@ -37,7 +39,7 @@ const addanswer = async (req, res) => {
         const { answer, code, explanation, username,questionId } = req.body;
 
         if (!answer || !code || !explanation || !username ||!questionId) {
-            return res.status(400).json({ error: "Answer, code, explanation, and username are required." });
+            return res.status(400).json({ error: "Answer, code, explanation, questionId and username are required." });
         }
 
         if (answer.length < 5 || answer.length > 25) {
@@ -66,6 +68,11 @@ const addanswer = async (req, res) => {
 const getQuestion = async (req, res) => {
     const questions = await Question.find({}).sort({createdAt: -1})
     res.status(200).json(questions)
+}
+
+const getAnswer = async(req,res)=>{
+    const answers=await Answer.find({}).sort({createdAt:-1})
+    res.status(200).json(answers)
 }
 
 const deleteQuestion = async (req, res) => {
@@ -119,10 +126,6 @@ const updateQuestion = async (req, res) => {
 const updateEntireQuestion = async (req, res) => {
     const { id } = req.params;
     const updateData = req.body; // Assuming update data is sent in the request body
-
-    console.log()
-
-    console.log("Attempting to update question with ID:", id);
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
         console.log("Invalid ID format received:", id);
@@ -217,4 +220,4 @@ const updateEntireAnswer = async (req, res) => {
 };
 
 
-module.exports = { addquestion, addanswer ,getQuestion,deleteQuestion,updateQuestion,updateAnswer,deleteAnswer,updateEntireQuestion,updateEntireAnswer};
+module.exports = { addquestion, addanswer ,getQuestion,deleteQuestion,updateQuestion,updateAnswer,deleteAnswer,updateEntireQuestion,updateEntireAnswer,getAnswer};

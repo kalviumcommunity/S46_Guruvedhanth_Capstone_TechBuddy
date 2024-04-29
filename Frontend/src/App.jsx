@@ -1,10 +1,11 @@
 import React from 'react'
 import Questions from "./components/Questions"
-import LoginPage from "./pages/LoginPage"
+import Answers from './components/Answers'
 function App() {
   return (
     <div>
-      <LoginPage/>
+      {/* <Questions/> */}
+      <Answers/>
     </div>
   )
 }
