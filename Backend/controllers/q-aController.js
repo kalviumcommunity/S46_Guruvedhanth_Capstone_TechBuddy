@@ -36,13 +36,13 @@ const addquestion = async (req, res) => {
 
 const addanswer = async (req, res) => {
     try {
-        const { answer, code, explanation, username,questionId } = req.body;
+        const { answer, code, explanation, username,questionId,category} = req.body;
 
         if (!answer || !code || !explanation || !username ||!questionId) {
             return res.status(400).json({ error: "Answer, code, explanation, questionId and username are required." });
         }
 
-        if (answer.length < 5 || answer.length > 25) {
+        if (answer.length < 5) {
             return res.status(400).json({ error: "Answer must be between 5 and 25 characters long." });
         }
 
@@ -55,7 +55,8 @@ const addanswer = async (req, res) => {
             code,
             explanation,
             username,
-            questionId
+            questionId,
+            category
         });
 
         const savedAnswer = await newAnswer.save();
