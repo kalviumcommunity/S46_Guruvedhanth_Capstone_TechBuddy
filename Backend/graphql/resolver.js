@@ -7,8 +7,8 @@ const COMMENT_ADDED = 'COMMENT_ADDED'; // Define the constant
 
 const resolvers = {
   Query: {
-    comments: async (_, { answerId }) => {
-      return await Comments.find({ answerId }).toArray();
+    comments: async (_) => {
+      return await Comments.find();
     },
   },
   Mutation: {
@@ -32,7 +32,7 @@ const resolvers = {
   },
   Subscription: {
     newComment: {
-      subscribe: async (_, { answerId }) => 
+      subscribe: async (_) => 
         pubsub.asyncIterator([COMMENT_ADDED])
     },
   },

@@ -13,7 +13,7 @@ function LoginDetails() {
 
   const handleGoogle = async () => {
     try {
-      const googleLoginWindow = window.open("http://localhost:3000/api/users/google");
+      const googleLoginWindow = window.open("http://localhost:3000/api/user/google");
     } catch (error) {
       console.error('Login error:', error);
       setError('An error occurred while initiating Google login.');
@@ -43,13 +43,14 @@ function LoginDetails() {
     }
 
     axios
-      .post("http://localhost:3000/api/users/login", {
+      .post("http://localhost:3000/api/user/login", {
         username: usernameInput,
         password: password,
       })
       .then((response) => {
         setUsername(usernameInput);
         document.cookie = `username=${usernameInput};path=/`;
+        console.log("Successfully user logged in ")
       })
       .catch((error) => {
         if (error.response && error.response.data && error.response.data.message) {

@@ -10,10 +10,12 @@ function SignupDetails() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useRecoilState(usernameState);
   const [error, setError] = useState(null);
+  const [agreeTerms, setAgreeTerms] = useState(false);
+
 
   const handleGoogle = async () => {
     try {
-      const googleLoginWindow = window.open("http://localhost:3000/api/users/google");
+      const googleLoginWindow = window.open("http://localhost:3000/api/user/google");
     } catch (error) {
       console.error('Login error:', error);
       setError('An error occurred while initiating Google login.');
@@ -23,24 +25,32 @@ function SignupDetails() {
 
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-
+    const { name, value, checked } = e.target;
     if (name === "email") {
       setEmail(value);
     } else if (name === "password") {
       setPassword(value);
-    }else if(name=="username"){
-      setUsernameInput(e.target.value)
+    } else if (name === "username") {
+      setUsernameInput(value);
+    } else if (name === "agreeTerms") {
+      setAgreeTerms(checked);
     }
   };
+  
+  
 
   const handleSubmit=(e)=>{
 
     e.preventDefault();
     setError(null);
 
+    if (!agreeTerms) {
+      setError("Please agree to the terms and conditions.");
+      return;
+    }
+
     axios
-      .post("http://localhost:3000/api/users/signup", {
+      .post("http://localhost:3000/api/user/signup", {
         username:usernameInput,
         password: password,
         email: email,
@@ -94,9 +104,14 @@ function SignupDetails() {
     
         {error && <p className="text-red-500 m-2 text-center">{error}</p>}
         <div className='flex justify-between items-center w-64'>
-          <input type="checkbox" />
-          <label >I agree to terms and conditions</label>
-        </div>
+            <input 
+              type="checkbox" 
+              name="agreeTerms" 
+              checked={agreeTerms} 
+              onChange={handleChange}
+            />
+            <label>I agree to terms and conditions</label>
+          </div>
 
         <button onClick={handleSubmit} className='h-10 w-72 bg-green-500	text-white rounded'>Signup</button>
       </div> 
