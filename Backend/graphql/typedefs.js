@@ -9,7 +9,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    comments(answerId: String!): [Comment!]!
+    comments: [Comment!]!
   }
 
   type Mutation {
@@ -17,7 +17,7 @@ const typeDefs = gql`
   }
 
   type Subscription {
-    newComment(answerId: String!): Comment!
+    newComment: Comment!
   }
 `;
 
