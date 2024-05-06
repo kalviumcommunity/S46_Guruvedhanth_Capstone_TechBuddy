@@ -8,10 +8,21 @@ export const usernameState = atom({
 
 export const currentQuestionIdState = atom({
   key: 'currentQuestionId', 
-  default: "1234567890", 
+  default: "1234567890",
 });
+
+export const currentAnswerIdState=atom({
+  key:"currentAnswerId",
+  default:""
+})
 
 export const commentsState = atom({
   key: 'commentsState',
   default: [],
 });
+
+
+export const category=atom({
+  key:"category",
+  default:"javascript"
+})

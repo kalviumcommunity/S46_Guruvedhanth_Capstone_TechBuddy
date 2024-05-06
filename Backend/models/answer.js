@@ -10,6 +10,10 @@ const answerSchema = new Schema({
     code:{
         type:String,
     },
+    category:{
+        type:String,
+        required:true,
+    },
     explanation:{
         type:String,
         required:true,

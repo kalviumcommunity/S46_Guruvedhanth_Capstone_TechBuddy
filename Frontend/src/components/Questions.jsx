@@ -7,16 +7,20 @@ import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github.css';
 
 function Questions() {
-  const [questions, setQuestion] = useState([]);
+  const [questions, setQuestions] = useState([]);
   const setCurrentQuestionId = useSetRecoilState(currentQuestionIdState);
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
         const response = await axios.get("http://localhost:3000/api/qa/queries");
-        setQuestion(response.data);
+        const decodedQuestions = response.data.map(question => ({
+          ...question,
+          code: atob(question.code), // Decode base64 encoded code
+        }));
+        setQuestions(decodedQuestions);
       } catch (error) {
-        console.error("Error fetching question:", error);
+        console.error("Error fetching questions:", error);
       }
     };
 
@@ -25,7 +29,6 @@ function Questions() {
 
   const handleAnswerClick = (id) => {
     setCurrentQuestionId(id);
-    // Additional logic for navigating to the answer page or displaying answers can be added here
   };
 
   return (

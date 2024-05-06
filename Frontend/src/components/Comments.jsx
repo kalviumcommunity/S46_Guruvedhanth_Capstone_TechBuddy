@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { gql, useSubscription, useMutation, useQuery } from "@apollo/client";
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { currentQuestionIdState, usernameState, commentsState } from '../Recoil';
+import { currentAnswerIdState, usernameState, commentsState } from '../Recoil';
 
 const SUBSCRIBE_TO_COMMENTS = gql`
   subscription Subscription {
@@ -35,7 +35,7 @@ const GET_COMMENTS = gql`
 `;
 
 function CommentsComponent() {
-  const answerId = useRecoilValue(currentQuestionIdState);
+  const answerId = useRecoilValue(currentAnswerIdState);
   const username = useRecoilValue(usernameState);
   const comments = useRecoilValue(commentsState);
   const setComments = useSetRecoilState(commentsState);
@@ -100,7 +100,7 @@ function CommentsComponent() {
         ))
       }
       </div>
-      <div className='flex w-98 justify-between m-1'>
+      <div className='flex w-98 justify-between m-1 gap-x-2'>
         <input
         type="text"
         value={commentInput}
