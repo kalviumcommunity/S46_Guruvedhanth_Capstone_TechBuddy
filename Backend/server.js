@@ -17,15 +17,17 @@ const { ApolloServer } = require('apollo-server-express');
 const { WebSocketServer } = require('ws');
 const { useServer } = require('graphql-ws/lib/use/ws');
 const http = require('http');
-
+const cookieParser = require('cookie-parser');
 
 
 const app = express()
 
 app.use(express.static(__dirname + '/public'));
-
-app.use(cors());
-
+app.use(cookieParser());
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
 app.use(
   session({
     secret: process.env.SECERET,
@@ -38,10 +40,6 @@ app.use(
     cookie: { maxAge: 1000 * 60 * 60 * 24 },
   })
 );
-
-app.use(passport.initialize());
-app.use(passport.session()); 
-
 
 
 const userRoutes=require("./routes/ userRoute")

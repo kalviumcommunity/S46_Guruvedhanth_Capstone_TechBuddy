@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { gql, useSubscription, useMutation, useQuery } from "@apollo/client";
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState } from "recoil";
+import Cookies from 'js-cookie';
 import { currentAnswerIdState, usernameState, commentsState } from '../Recoil';
+
 
 const SUBSCRIBE_TO_COMMENTS = gql`
   subscription Subscription {
@@ -36,9 +39,11 @@ const GET_COMMENTS = gql`
 
 function CommentsComponent() {
   const answerId = useRecoilValue(currentAnswerIdState);
-  const username = useRecoilValue(usernameState);
+  // const username = useRecoilValue(usernameState);
   const comments = useRecoilValue(commentsState);
   const setComments = useSetRecoilState(commentsState);
+  const [username, setUsername] = useRecoilState(usernameState); // Use Recoil state for username
+
 
   const [commentInput, setCommentInput] = useState('');
   const { loading, error, data } = useQuery(GET_COMMENTS);
@@ -48,6 +53,15 @@ function CommentsComponent() {
       setComments(data.comments);
     }
   }, [data, setComments]);
+
+  useEffect(() => {
+    const cookieUsername = Cookies.get("username");
+    if (cookieUsername) {
+        setUsername(cookieUsername);
+    } else {
+        setUsername("Anonymous")
+    }
+}, [setUsername]);
 
   const { loading: subLoad, error: subError } = useSubscription(
     SUBSCRIBE_TO_COMMENTS,
@@ -67,10 +81,6 @@ function CommentsComponent() {
   const [addComment] = useMutation(ADD_COMMENT);
 
   const handleAddComment = () => {
-    if (!username) {
-      console.error("Username is empty or undefined");
-      return;
-    }
 
     addComment({
       variables: {
@@ -106,8 +116,9 @@ function CommentsComponent() {
         value={commentInput}
         className="h-10 w-64 border border-green-500 rounded-md"
         onChange={(e) => setCommentInput(e.target.value)}
+        placeholder= "Add a comment"
       />
-      <button onClick={handleAddComment} className='bg-green-500 rounded-full h-10 w-10'>+</button>
+      <button onClick={handleAddComment}  className='bg-green-500 rounded-full h-10 w-10'>+</button>
       
       </div>
     </div>

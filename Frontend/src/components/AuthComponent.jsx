@@ -10,8 +10,8 @@ function AuthComponent() {
     setCurrentImage(currentImage === image1 ? image2 : image1);
   };
 
-  // Changing image every 2 seconds
-  setTimeout(toggleImage, 2000);
+  // Changing image every 4 seconds
+  setTimeout(toggleImage, 4000);
 
   return (
     <div>

@@ -18,10 +18,6 @@ const userSchema = new Schema({
   email:{
     type:String,
   },
-  googleId: String,
-  refreshToken:{
-    type:String,
-  },
 });
 
 module.exports = mongoose.model('User', userSchema);

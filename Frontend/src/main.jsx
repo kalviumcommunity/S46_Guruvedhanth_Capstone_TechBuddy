@@ -11,6 +11,7 @@ import { ApolloClient } from '@apollo/client';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
+import { BrowserRouter } from 'react-router-dom';
 
 const httpLink = new HttpLink({
   uri: 'http://localhost:3000/graphql'
@@ -47,7 +48,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <ApolloProvider client={client}>
     <React.StrictMode>
       <RecoilRoot> 
+        <BrowserRouter>
         <App />
+        </BrowserRouter>
       </RecoilRoot>
     </React.StrictMode>
   </ApolloProvider>
