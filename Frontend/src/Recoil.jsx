@@ -2,13 +2,13 @@ import { atom } from 'recoil';
 
 export const usernameState = atom({
   key: 'usernameState', // Unique ID for this atom
-  default: 'Tony', // Initial value for the atom
+  default: '', // Initial value for the atom
 });
 
 
 export const currentQuestionIdState = atom({
   key: 'currentQuestionId', 
-  default: "1234567890",
+  default: "",
 });
 
 export const currentAnswerIdState=atom({
