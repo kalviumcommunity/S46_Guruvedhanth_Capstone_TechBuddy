@@ -146,26 +146,25 @@ const updateQuestion = async (req, res) => {
 const updateEntireQuestion = async (req, res) => {
     const { id } = req.params;
     const updateData = req.body; // Assuming update data is sent in the request body
-
+  
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        console.log("Invalid ID format received:", id);
-        return res.status(404).json({ error: "Invalid ID format" });
+      console.log("Invalid ID format received:", id);
+      return res.status(404).json({ error: "Invalid ID format" });
     }
-
+  
     try {
-        const question = await Question.findByIdAndUpdate({ _id: id }, updateData);
-        if (!question) {
-            console.log("No question found with ID:", id);
-            return res.status(404).json({ error: "No such question" });
-        }
-        res.status(200).json(question);
+      const question = await Question.findByIdAndUpdate(id, updateData, { new: true });
+      if (!question) {
+        console.log("No question found with ID:", id);
+        return res.status(404).json({ error: "No such question" });
+      }
+      res.status(200).json(question);
     } catch (error) {
-        console.error("Error during updating:", error);
-        res.status(500).json({ error: "Error updating the : " + error.message });
+      console.error("Error during updating:", error);
+      res.status(500).json({ error: "Error updating the question: " + error.message });
     }
-};
-
-
+  };
+  
 
 
 

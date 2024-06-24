@@ -28,7 +28,7 @@ function Navbar() {
   };
 
   return (
-    <div className='flex flex-row justify-between h-16 items-center px-36 bg-slate-100'>
+    <div className='flex flex-row justify-between h-16 items-center px-64 md:px-40 bg-slate-100'>
       <img src={Logo} alt="Logo" className="w-12" />
       <div className='flex flex-row gap-x-10'>
         <p className="">Home</p>

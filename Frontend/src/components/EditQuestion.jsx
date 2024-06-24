@@ -18,14 +18,15 @@ function EditQuestion() {
   useEffect(() => {
     const fetchQuestion = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/qa/queries/${id}`);
+        const response = await axios.get(`https://s46-guruvedhanth-capstone-techbuddy.onrender.com/api/qa/queries/${id}`);
         const question = response.data;
         setTitle(question.title);
         setCategory(question.category);
-        setCode(validateBase64(question.code) ? atob(question.code) : question.code);
+        setCode(isValidBase64(question.code) ? atob(question.code) : question.code);
         setDescription(question.description);
       } catch (error) {
         console.error("Error fetching question:", error);
+        setError("Failed to fetch question data.");
       }
     };
 
@@ -39,7 +40,7 @@ function EditQuestion() {
     }
   }, [setUsername]);
 
-  const validateBase64 = (str) => {
+  const isValidBase64 = (str) => {
     try {
       return btoa(atob(str)) === str;
     } catch (err) {
@@ -52,8 +53,8 @@ function EditQuestion() {
     setError(null);
 
     // Frontend validation for title and description
-    if (!title || !description) {
-      setError("Title and description are required");
+    if (!title || !description || !code) {
+      setError("Title, code, and description are required");
       return;
     }
     if (title.length < 5 || title.length > 25) {
@@ -66,12 +67,12 @@ function EditQuestion() {
     }
 
     try {
-      const updatedQuestion = { title, description };
-      const response = await axios.patch(`http://localhost:3000/api/qa/updatequestion/${id}`, updatedQuestion);
+      const updatedQuestion = { title, category, code, description };
+      const response = await axios.put(`https://s46-guruvedhanth-capstone-techbuddy.onrender.com/api/qa/updateentirequestion/${id}`, updatedQuestion);
       navigate('/explore');
     } catch (error) {
-      setError(error.response.data.error); // Update error state with the error message from server
       console.error("Error updating question:", error);
+      setError(error.response?.data?.error || "Error updating question");
     }
   };
 

@@ -49,7 +49,7 @@ function AnswerInput() {
     const base64EncodedText = btoa(code);
 
     axios
-      .post("http://localhost:3000/api/qa/answer", {
+      .post("https://s46-guruvedhanth-capstone-techbuddy.onrender.com/api/qa/answer", {
         answer: answer,
         code: base64EncodedText,
         explanation: explanation,

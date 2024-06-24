@@ -39,7 +39,7 @@ function SignupDetails() {
 
     axios
       .post(
-        "http://localhost:3000/api/user/signup",
+        "https://s46-guruvedhanth-capstone-techbuddy.onrender.com/api/user/signup",
         { username: usernameInput, password, email },
         { withCredentials: true } // Ensure cookies are included
       )
