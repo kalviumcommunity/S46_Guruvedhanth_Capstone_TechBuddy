@@ -36,7 +36,7 @@ function LoginDetails() {
 
     axios
       .post(
-        'http://localhost:3000/api/user/login',
+        'https://s46-guruvedhanth-capstone-techbuddy.onrender.com/api/user/login',
         { username: usernameInput, password: password },
         { withCredentials: true }
       )

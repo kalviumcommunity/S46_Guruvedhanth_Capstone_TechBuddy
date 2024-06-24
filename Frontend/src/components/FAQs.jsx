@@ -91,13 +91,13 @@ const generateAnswer = (index) => {
     case 1:
       return "TechBuddy is a platform that connects developers to collaborate on code sharing and innovative projects.";
     case 2:
-      return "TechBuddy was founded in 2020 by a group of passionate developers.";
+      return "TechBuddy was founded in 2024 by a group of passionate developer.";
     case 3:
       return "Yes, having a problem-solving mindset is crucial for web development.";
     case 4:
       return "Institutions can utilize TechBuddy by signing up for an institutional account and inviting their students and teachers.";
     case 5:
-      return "TechBuddy was founded by John Doe and Jane Smith.";
+      return "TechBuddy was founded by Guruvedhanth.";
     case 6:
       return "You can contribute to TechBuddy by participating in open-source projects, sharing your knowledge, and collaborating with other developers.";
     default:

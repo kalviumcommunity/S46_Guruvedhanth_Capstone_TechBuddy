@@ -19,11 +19,19 @@ function Questions() {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/qa/queries");
-        const decodedQuestions = response.data.map(question => ({
-          ...question,
-          code: atob(question.code), // Decode base64 encoded code
-        }));
+        const response = await axios.get("https://s46-guruvedhanth-capstone-techbuddy.onrender.com/api/qa/queries");
+        const decodedQuestions = response.data.map(question => {
+          // Validate the Base64 string before decoding
+          if (isValidBase64(question.code)) {
+            return {
+              ...question,
+              code: atob(question.code), // Decode base64 encoded code
+            };
+          } else {
+            console.error(`Invalid Base64 code for question ID ${question._id}`);
+            return question;
+          }
+        });
         // Sort questions by createdAt field in descending order
         decodedQuestions.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setQuestions(decodedQuestions);
@@ -44,6 +52,14 @@ function Questions() {
     }
   }, [setUsername]);
 
+  const isValidBase64 = (str) => {
+    try {
+      return btoa(atob(str)) === str;
+    } catch (err) {
+      return false;
+    }
+  };
+
   const handleAnswerClick = (id) => {
     setCurrentQuestionId(id);
     localStorage.setItem("questionId", id);
@@ -52,7 +68,7 @@ function Questions() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/api/qa/delquestion/${id}`);
+      await axios.delete(`https://s46-guruvedhanth-capstone-techbuddy.onrender.com/api/qa/delquestion/${id}`);
       setQuestions(questions.filter(question => question._id !== id));
     } catch (error) {
       console.error("Error deleting question:", error);

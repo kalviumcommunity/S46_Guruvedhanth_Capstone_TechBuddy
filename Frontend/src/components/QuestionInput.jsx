@@ -58,7 +58,7 @@ function QuestionInput() {
         setCategory(selectedLanguage);
 
         axios
-            .post("http://localhost:3000/api/qa/question", {
+            .post("https://s46-guruvedhanth-capstone-techbuddy.onrender.com/api/qa/question", {
                 title: title,
                 category: selectedLanguage,
                 code: base64EncodedText,

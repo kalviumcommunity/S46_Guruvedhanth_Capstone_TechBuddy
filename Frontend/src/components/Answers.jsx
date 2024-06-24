@@ -17,7 +17,7 @@ function Answers() {
   useEffect(() => {
     const fetchAnswers = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/qa/result");
+        const response = await axios.get("https://s46-guruvedhanth-capstone-techbuddy.onrender.com/api/qa/result");
         const decodedAnswers = response.data.map(answer => ({
           ...answer,
           code: atob(answer.code), // Decode base64 encoded code
