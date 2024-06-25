@@ -42,7 +42,7 @@ app.use(
 );
 
 
-const userRoutes=require("./routes/ userRoute")
+const userRoutes=require("./routes/userRoute")
 const qaRoutes =require("./routes/q-a")
 
 app.use(express.json());
