@@ -18,7 +18,7 @@ const httpLink = new HttpLink({
 });
 
 const wsLink = new GraphQLWsLink(createClient({
-  url: 'ws://s46-guruvedhanth-capstone-techbuddy.onrender.com/subscriptions',
+  url: 'wss://s46-guruvedhanth-capstone-techbuddy.onrender.com/subscriptions',
 }));
 
 // The split function takes three parameters:

@@ -25,7 +25,7 @@ const app = express()
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
 app.use(cors({
-  origin: 'https://66837f2dfded1afe2259ee8a--soft-selkie-5beb4b.netlify.app',
+  origin: 'https://668381faa6c65700e449982e--reliable-pudding-4dd422.netlify.app',
   credentials: true
 }));
 app.use(
